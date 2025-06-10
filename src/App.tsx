@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { usePiAuth } from "./usePiAuth";
 import { fetchWalletAddress } from "./api/wallet";
 import PaymentButton from "./components/PaymentButton";
@@ -24,7 +24,6 @@ function App() {
           ) : (
             <p>Đang tải địa chỉ ví...</p>
           )}
-          {/* Gắn nút nạp Pi */}
           <PaymentButton />
         </>
       ) : (
