@@ -12,6 +12,7 @@ export function usePiAuth() {
   useEffect(() => {
     if (!window.Pi) {
       console.warn("Pi SDK not loaded");
+      setTimeout(() => window.location.reload(), 1000); // Tự reload nếu SDK chưa kịp load
       return;
     }
 
@@ -22,11 +23,15 @@ export function usePiAuth() {
       ["username"]
     )
       .then((authResult: any) => {
-        setUsername(authResult.user.username);
-        console.log("Đăng nhập Pi thành công:", authResult.user.username);
+        const user = authResult?.user?.username;
+        if (user) {
+          setUsername(user);
+          localStorage.setItem("pi_username", user); // Gợi ý lưu thêm
+          console.log("Đăng nhập Pi thành công:", user);
+        }
       })
       .catch((err: any) => {
-        console.error("Lỗi khi login Pi", err);
+        console.error("Lỗi khi login Pi:", err);
       });
   }, []);
 
