@@ -9,7 +9,6 @@ declare global {
 function App() {
   const [username, setUsername] = useState<string | null>(null);
 
-  // Load username đã lưu (nếu có)
   useEffect(() => {
     const savedUser = localStorage.getItem("pi_username");
     if (savedUser) {
@@ -17,12 +16,19 @@ function App() {
     }
   }, []);
 
-  // Hàm xử lý đăng nhập
   const handleLogin = () => {
+    console.log("🟡 Nút Login được bấm");
+
+    let tries = 0;
     const waitForPi = () => {
       if (typeof window.Pi === "undefined") {
-        console.log("⏳ Đang chờ SDK Pi load...");
-        setTimeout(waitForPi, 100);
+        console.log("⏳ SDK Pi chưa sẵn sàng, thử lại...");
+        tries++;
+        if (tries > 20) {
+          alert("❌ Đợi SDK Pi quá lâu mà vẫn chưa load được.");
+          return;
+        }
+        setTimeout(waitForPi, 200);
       } else {
         console.log("✅ SDK Pi đã sẵn sàng");
 
@@ -40,20 +46,20 @@ function App() {
           ["username"]
         )
           .then((res: any) => {
-            console.log("🧾 Kết quả trả về từ SDK:", res);
+            console.log("🧾 Kết quả SDK:", res);
             const user = res?.user?.username;
             if (user) {
               setUsername(user);
               localStorage.setItem("pi_username", user);
               alert("✅ Đăng nhập thành công: " + user);
             } else {
-              alert("⚠️ Không lấy được username từ Pi SDK.");
+              alert("⚠️ Không lấy được username.");
               console.warn("⚠️ Không có user:", res);
             }
           })
           .catch((err: any) => {
-            alert("❌ Lỗi khi đăng nhập: " + JSON.stringify(err));
-            console.error("❌ Lỗi:", err);
+            alert("❌ Lỗi khi login: " + JSON.stringify(err));
+            console.error("❌", err);
           });
       }
     };
@@ -70,7 +76,7 @@ function App() {
           👋 Xin chào, <strong style={{ color: "green" }}>{username}</strong>!
         </p>
       ) : (
-        <button onClick={handleLogin}>🔐 Login with Pi</button>
+        <button onClick={() => handleLogin()}>🔐 Login with Pi</button>
       )}
     </div>
   );
