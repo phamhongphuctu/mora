@@ -10,23 +10,22 @@ function App() {
   const [username, setUsername] = useState<string | null>(null);
 
   const handleLogin = () => {
+    console.log("🔍 Kiểm tra window.Pi:", window.Pi);
     if (!window.Pi) {
       alert("⚠️ Pi SDK chưa sẵn sàng");
       return;
     }
 
-    // Gọi khởi tạo SDK
     window.Pi.init({
       version: "2.0",
       sandbox: true,
-      appId: "mora4382", // sửa đúng với subdomain PiNet của bạn
+      appId: "mora4382", // ID đúng theo PiNet
     });
 
-    // Gọi login
     window.Pi.authenticate(
       {
         onIncompletePaymentFound: (payment: any) =>
-          console.log("📌 Giao dịch chưa hoàn tất:", payment),
+          console.log("🟡 Incomplete payment:", payment),
       },
       ["username"]
     )
@@ -36,14 +35,13 @@ function App() {
         console.log("✅ Đăng nhập thành công:", user);
       })
       .catch((err: any) => {
-        console.error("❌ Lỗi khi đăng nhập:", err);
+        console.error("❌ Lỗi đăng nhập:", err);
       });
   };
 
   return (
     <div style={{ padding: "2rem" }}>
       <h1>Mora</h1>
-
       {username ? (
         <p>Xin chào <strong>{username}</strong>!</p>
       ) : (
