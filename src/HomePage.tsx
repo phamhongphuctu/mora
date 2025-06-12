@@ -1,9 +1,7 @@
-
-
 function HomePage() {
   return (
     <div style={{ padding: "2rem" }}>
-      <h2>Chào mừng đến với BZ Market</h2>
+      <h2>Chào mừng đến với Mora</h2>
       <p>Nơi người mua và người bán kết nối với nhau bằng Pi.</p>
 
       <section style={{ marginTop: "2rem" }}>
