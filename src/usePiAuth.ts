@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 declare global {
   interface Window {
@@ -9,10 +9,9 @@ declare global {
 export function usePiAuth() {
   const [username, setUsername] = useState<string | null>(null);
 
-  useEffect(() => {
+  const loginWithPi = () => {
     if (!window.Pi) {
-      console.warn("Pi SDK not loaded");
-      setTimeout(() => window.location.reload(), 1000); // Tự reload nếu SDK chưa kịp load
+      alert("Pi SDK chưa sẵn sàng!");
       return;
     }
 
@@ -26,14 +25,13 @@ export function usePiAuth() {
         const user = authResult?.user?.username;
         if (user) {
           setUsername(user);
-          localStorage.setItem("pi_username", user); // Gợi ý lưu thêm
-          console.log("Đăng nhập Pi thành công:", user);
+          console.log("✅ Đăng nhập thành công:", user);
         }
       })
       .catch((err: any) => {
-        console.error("Lỗi khi login Pi:", err);
+        console.error("❌ Lỗi đăng nhập:", err);
       });
-  }, []);
+  };
 
-  return { username };
+  return { username, loginWithPi };
 }
