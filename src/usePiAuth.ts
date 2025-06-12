@@ -18,7 +18,8 @@ export function usePiAuth() {
     window.Pi.init({
       version: "2.0",
       sandbox: true,
-      appId: "mora", // tên subdomain trong đường dẫn: https://mora-seven.vercel.app
+      appId: "mora4382",
+ // tên subdomain trong đường dẫn: https://mora-seven.vercel.app
     });
     
 
