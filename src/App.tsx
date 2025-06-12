@@ -15,7 +15,7 @@ function App() {
       setUsername(savedUser);
     }
   }, []);
-
+  console.log("🌐 Tên miền hiện tại:", window.location.href);
   const handleLogin = () => {
     console.log("🟡 Nút Login được bấm");
 
