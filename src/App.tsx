@@ -10,7 +10,6 @@ function App() {
   const [username, setUsername] = useState<string | null>(null);
 
   const handleLogin = () => {
-    console.log("🔍 Kiểm tra window.Pi:", window.Pi);
     if (!window.Pi) {
       alert("⚠️ Pi SDK chưa sẵn sàng");
       return;
@@ -19,13 +18,13 @@ function App() {
     window.Pi.init({
       version: "2.0",
       sandbox: true,
-      appId: "mora4382", // ID đúng theo PiNet
+      appId: "mora4382", // ✅ đúng appId đã hiển thị trên Pi Portal
     });
 
     window.Pi.authenticate(
       {
         onIncompletePaymentFound: (payment: any) =>
-          console.log("🟡 Incomplete payment:", payment),
+          console.log("🔁 Giao dịch chưa hoàn tất:", payment),
       },
       ["username"]
     )
