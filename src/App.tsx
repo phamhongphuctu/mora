@@ -14,8 +14,12 @@ function App() {
     if (savedUser) {
       setUsername(savedUser);
     }
+  
+    // ✅ Log tên miền chỉ 1 lần duy nhất khi load app
+    console.log("🌐 Tên miền hiện tại:", window.location.href);
   }, []);
-  console.log("🌐 Tên miền hiện tại:", window.location.href);
+  
+
   const handleLogin = () => {
     console.log("🟡 Nút Login được bấm");
 
