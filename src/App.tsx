@@ -18,39 +18,41 @@ function App() {
   }, []);
 
   const handleLogin = () => {
-    if (!window.Pi) {
-      alert("⚠️ Pi SDK chưa sẵn sàng. Vui lòng mở bằng Pi Browser.");
-      return;
-    }
-
-    window.Pi.init({
-      version: "2.0",
-      sandbox: true,
-      appId: "mora4382", // ✅ Đúng appId của anh Từ trên Pi Portal
-    });
-
-    window.Pi.authenticate(
-      {
-        onIncompletePaymentFound: (payment: any) =>
-          console.log("🔁 Giao dịch chưa hoàn tất:", payment),
-      },
-      ["username"]
-    )
-      .then((res: any) => {
-        const user = res?.user?.username;
-        if (user) {
-          setUsername(user);
-          localStorage.setItem("pi_username", user);
-          console.log("✅ Đăng nhập thành công:", user);
-        } else {
-          console.warn("⚠️ Không lấy được username");
-        }
-      })
-      .catch((err: any) => {
-        console.error("❌ Lỗi khi đăng nhập:", err);
-      });
+    const waitForPi = () => {
+      if (typeof window.Pi === "undefined") {
+        setTimeout(waitForPi, 100); // chờ 100ms rồi thử lại
+      } else {
+        // đã có Pi SDK → tiến hành login
+        window.Pi.init({
+          version: "2.0",
+          sandbox: true,
+          appId: "mora4382",
+        });
+  
+        window.Pi.authenticate(
+          {
+            onIncompletePaymentFound: (payment: any) =>
+              console.log("🔁 Giao dịch chưa hoàn tất:", payment),
+          },
+          ["username"]
+        )
+          .then((res: any) => {
+            const user = res?.user?.username;
+            if (user) {
+              setUsername(user);
+              localStorage.setItem("pi_username", user);
+              console.log("✅ Đăng nhập thành công:", user);
+            }
+          })
+          .catch((err: any) => {
+            console.error("❌ Lỗi khi đăng nhập:", err);
+          });
+      }
+    };
+  
+    waitForPi(); // gọi ngay lần đầu
   };
-
+  
   return (
     <div style={{ padding: "2rem", textAlign: "center" }}>
       <h1>Mora</h1>
