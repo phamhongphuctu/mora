@@ -14,11 +14,9 @@ function App() {
     if (savedUser) {
       setUsername(savedUser);
     }
-  
-    // ✅ Log tên miền chỉ 1 lần duy nhất khi load app
+
     console.log("🌐 Tên miền hiện tại:", window.location.href);
   }, []);
-  
 
   const handleLogin = () => {
     console.log("🟡 Nút Login được bấm");
@@ -71,16 +69,51 @@ function App() {
     waitForPi();
   };
 
+  // ✅ Hàm gửi 0.01 Pi test
+  const sendTestPayment = () => {
+    if (!window.Pi) {
+      alert("⚠️ SDK Pi chưa sẵn sàng!");
+      return;
+    }
+
+    window.Pi.createPayment(
+      {
+        amount: 0.01,
+        memo: "test-payment",
+        metadata: { type: "test" },
+      },
+      {
+        onReadyForServerApproval: (paymentId: string) => {
+          console.log("📩 Ready for approval:", paymentId);
+        },
+        onReadyForServerCompletion: (paymentId: string, txid: string) => {
+          console.log("✅ Ready to complete:", paymentId, txid);
+        },
+        onCancel: () => {
+          alert("❌ Người dùng đã huỷ giao dịch.");
+        },
+        onError: (err: any) => {
+          alert("❌ Lỗi khi gửi Pi: " + JSON.stringify(err));
+        },
+      }
+    );
+  };
+
   return (
     <div style={{ padding: "2rem", textAlign: "center" }}>
       <h1>Mora</h1>
 
       {username ? (
-        <p>
-          👋 Xin chào, <strong style={{ color: "green" }}>{username}</strong>!
-        </p>
+        <>
+          <p>
+            👋 Xin chào, <strong style={{ color: "green" }}>{username}</strong>!
+          </p>
+          <button onClick={sendTestPayment} style={{ marginTop: "1rem" }}>
+            💸 Gửi 0.01 Pi test
+          </button>
+        </>
       ) : (
-        <button onClick={() => handleLogin()}>🔐 Login with Pi</button>
+        <button onClick={handleLogin}>🔐 Login with Pi</button>
       )}
     </div>
   );
