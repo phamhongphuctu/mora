@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { usePiAuth } from "./usePiAuth";
 import { fetchWalletAddress } from "./api/wallet";
@@ -25,6 +26,11 @@ function App() {
             <p>Đang tải địa chỉ ví...</p>
           )}
           <PaymentButton />
+
+          {/* ✅ Nút chuyển qua trang sản phẩm */}
+          <Link to="/products">
+            <button style={{ marginTop: "2rem" }}>🛍️ Xem sản phẩm</button>
+          </Link>
         </>
       ) : (
         <p>Đang đăng nhập qua Pi Browser...</p>
