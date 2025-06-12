@@ -69,7 +69,6 @@ function App() {
     waitForPi();
   };
 
-  // ✅ Hàm gửi 0.01 Pi test
   const sendTestPayment = () => {
     if (!window.Pi) {
       alert("⚠️ SDK Pi chưa sẵn sàng!");
@@ -103,18 +102,17 @@ function App() {
     <div style={{ padding: "2rem", textAlign: "center" }}>
       <h1>Mora</h1>
 
-      {username ? (
-        <>
-          <p>
-            👋 Xin chào, <strong style={{ color: "green" }}>{username}</strong>!
-          </p>
-          <button onClick={sendTestPayment} style={{ marginTop: "1rem" }}>
-            💸 Gửi 0.01 Pi test
-          </button>
-        </>
-      ) : (
-        <button onClick={handleLogin}>🔐 Login with Pi</button>
+      {username && (
+        <p>
+          👋 Xin chào, <strong style={{ color: "green" }}>{username}</strong>!
+        </p>
       )}
+
+      <button onClick={handleLogin}>🔐 Login with Pi</button>
+
+      <button onClick={sendTestPayment} style={{ marginTop: "1rem" }}>
+        💸 Gửi 0.01 Pi test
+      </button>
     </div>
   );
 }
