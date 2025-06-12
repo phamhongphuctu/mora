@@ -1,15 +1,9 @@
 import { useState } from "react";
 
-declare global {
-  interface Window {
-    Pi: any;
-  }
-}
-
 export function usePiAuth() {
   const [username, setUsername] = useState<string | null>(null);
 
-  const loginWithPi = () => {
+  const handleLogin = () => {
     if (!window.Pi) {
       alert("Pi SDK chưa sẵn sàng!");
       return;
@@ -18,26 +12,22 @@ export function usePiAuth() {
     window.Pi.init({
       version: "2.0",
       sandbox: true,
-      appId: "mora4382",
- // tên subdomain trong đường dẫn: https://mora-seven.vercel.app
+      appId: "mora4382", // 👈 sửa đúng tên app trong PiNet
     });
-    
 
     window.Pi.authenticate(
-      { onIncompletePaymentFound: (payment: any) => console.log("Incomplete:", payment) },
+      {
+        onIncompletePaymentFound: (payment: any) =>
+          console.log("Incomplete:", payment),
+      },
       ["username"]
     )
-      .then((authResult: any) => {
-        const user = authResult?.user?.username;
-        if (user) {
-          setUsername(user);
-          console.log("✅ Đăng nhập thành công:", user);
-        }
+      .then((res: any) => {
+        setUsername(res.user.username);
+        console.log("✅ Login thành công:", res.user.username);
       })
-      .catch((err: any) => {
-        console.error("❌ Lỗi đăng nhập:", err);
-      });
+      .catch(console.error);
   };
 
-  return { username, loginWithPi };
+  return { username, handleLogin };
 }
