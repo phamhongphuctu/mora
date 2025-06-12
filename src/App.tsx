@@ -9,21 +9,24 @@ declare global {
 function App() {
   const [username, setUsername] = useState<string | null>(null);
 
+  // Load username nếu đã lưu
   useEffect(() => {
-    console.log("⚠️ Pi SDK hiện tại là:", window.Pi);
-    console.log("📱 Đang chạy trên:", navigator.userAgent);
+    const savedUser = localStorage.getItem("pi_username");
+    if (savedUser) {
+      setUsername(savedUser);
+    }
   }, []);
 
   const handleLogin = () => {
     if (!window.Pi) {
-      alert("⚠️ Pi SDK chưa sẵn sàng");
+      alert("⚠️ Pi SDK chưa sẵn sàng. Vui lòng mở bằng Pi Browser.");
       return;
     }
 
     window.Pi.init({
       version: "2.0",
       sandbox: true,
-      appId: "mora4382", // ✅ đúng appId đã hiển thị trên Pi Portal
+      appId: "mora4382", // ✅ Đúng appId của anh Từ trên Pi Portal
     });
 
     window.Pi.authenticate(
@@ -35,19 +38,27 @@ function App() {
     )
       .then((res: any) => {
         const user = res?.user?.username;
-        setUsername(user);
-        console.log("✅ Đăng nhập thành công:", user);
+        if (user) {
+          setUsername(user);
+          localStorage.setItem("pi_username", user);
+          console.log("✅ Đăng nhập thành công:", user);
+        } else {
+          console.warn("⚠️ Không lấy được username");
+        }
       })
       .catch((err: any) => {
-        console.error("❌ Lỗi đăng nhập:", err);
+        console.error("❌ Lỗi khi đăng nhập:", err);
       });
   };
 
   return (
-    <div style={{ padding: "2rem" }}>
+    <div style={{ padding: "2rem", textAlign: "center" }}>
       <h1>Mora</h1>
+
       {username ? (
-        <p>Xin chào <strong>{username}</strong>!</p>
+        <p>
+          👋 Xin chào, <strong style={{ color: "green" }}>{username}</strong>!
+        </p>
       ) : (
         <button onClick={handleLogin}>🔐 Login with Pi</button>
       )}
