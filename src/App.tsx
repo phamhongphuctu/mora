@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 declare global {
   interface Window {
@@ -8,6 +8,11 @@ declare global {
 
 function App() {
   const [username, setUsername] = useState<string | null>(null);
+
+  useEffect(() => {
+    console.log("⚠️ Pi SDK hiện tại là:", window.Pi);
+    console.log("📱 Đang chạy trên:", navigator.userAgent);
+  }, []);
 
   const handleLogin = () => {
     if (!window.Pi) {
