@@ -16,7 +16,8 @@ function App() {
 
   return (
     <div style={{ padding: "2rem" }}>
-      <h1>BZ Market</h1>
+      <h1>Mora</h1>
+
       {username ? (
         <>
           <p>Xin chào, <strong>{username}</strong>!</p>
